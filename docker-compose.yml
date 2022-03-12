@@ -1,0 +1,42 @@
+version: "3.7"
+
+services:
+  database:
+    image: postgres:11
+    ports:
+      - "5432:5432"
+    volumes:
+      - "pgdata:/var/lib/postgresql/data"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: gac_master
+
+  backend:
+      image: registry.gitlab.com/bjvta/gac-motor/backend:develop
+      hostname: app
+      environment:
+        PYTHONPATH: /app/src
+
+      volumes:
+        - ".:/app"
+        - "home:/home/app"
+        - "pyenv:/python"
+
+      ports:
+        - "8000:8000"
+      links:
+        - "database:database"
+        - "smtp-server:smtp-server"
+
+  smtp-server:
+    image: mailhog/mailhog
+
+    ports: 
+      - "1025:1025"
+      - "8025:8025"
+
+volumes:
+  home:
+  pyenv:
+  pgdata:

@@ -1,0 +1,43 @@
+version: "3.7"
+
+services:
+  database:
+    image: postgres:11
+    ports:
+      - "5432:5432"
+    volumes:
+      - "pgdata:/var/lib/postgresql/data"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: gac_master
+
+  # redis:
+  #   image: redis:alpine
+  #   volumes:
+  #     - redisdata:/data
+
+  backend:
+    image: registry.gitlab.com/bjvta/gac-motor/backend:production_9562535
+    hostname: gac
+    env_file: .env
+    # restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      DJANGO_SETTINGS_MODULE: gac.settings.production
+      ENVIRONMENT: production
+      # COMMIT_SHA: {{COMMIT_SHA}}
+      PORT: 8000
+    links:
+      - "database:database"
+      # - "redis:redis"
+    # volumes:
+    #   - "./temp:/app/public/temp"
+    #   - "./backup_db:/app/backup_db"
+
+volumes:
+  # temp:
+  # backup_db:
+  pgdata:
+  # redissdata:

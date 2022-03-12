@@ -1,0 +1,16 @@
+django==2.2
+django-extensions
+django-autoslug
+Pillow
+psycopg2-binary
+django-widget-tweaks
+honcho
+jinja2
+django-ckeditor
+
+# Production
+uwsgi
+django-anymail[mailgun]
+raven
+django-storages
+boto3

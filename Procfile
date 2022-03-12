@@ -1,0 +1,1 @@
+uwsgi: gosu app uwsgi --ini uwsgi.ini --http :${PORT}
